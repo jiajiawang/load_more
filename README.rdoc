@@ -1,3 +1,21 @@
 = LoadMore
+A simple solution for performing load more queries with ActiveRecord
 
+== Installation
+In your Gemfile:
+  gem 'load_more', git: 'git://github.com/jiajiawang/load_more.git'
+Then run
+  bundle install
+  
+== Usage
+In your model:
+  class Article < ActiveRecord::Base
+    acts_as_load_more
+  end
+Then you can use
+  >> Article.load_more.last_load(10)
+By default it use id as the sort column.
+
+== License
 This project rocks and uses MIT-LICENSE.
+  
