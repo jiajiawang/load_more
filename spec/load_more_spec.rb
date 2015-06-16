@@ -21,23 +21,31 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
   end
 
   describe Article do
-    subject { Article }
-    it { should respond_to?(:load_more) }
-    it { should respond_to?(:per_load) }
+    it 'its default per_load is 10' do
+      expect(Article.per_load).to eq(10)
+    end
+
+    describe "per_load=" do
+      it 'assigns per_load to the given argument' do
+        Article.per_load = 15
+        expect(Article.per_load).to eq(15)
+      end
+    end
 
     describe '#load_more' do
       before :each do
+        Article.per_load = 8
         1.upto(20) do |num|
           Article.create(id: num)
         end
       end
 
-      it 'returns 10 results' do
-        expect(Article.load_more.size).to eq(10)
+      it 'returns {Article.per_load} results' do
+        expect(Article.load_more.size).to eq(Article.per_load)
       end
 
       it 'returns results ordered by id descendingly' do
-        expect(Article.load_more.pluck(:id)).to eq((11..20).to_a.reverse)
+        expect(Article.load_more.pluck(:id)).to eq((13..20).to_a.reverse)
       end
     end
 
