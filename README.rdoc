@@ -3,19 +3,28 @@ A simple solution for performing load more queries with ActiveRecord
 
 == Installation
 In your Gemfile:
-  gem 'load_more', git: 'git://github.com/jiajiawang/load_more.git'
+  gem 'load_more'
 Then run
   bundle install
-  
+
 == Usage
 In your model:
   class Article < ActiveRecord::Base
     acts_as_load_more
+    self.per_load = 15
   end
+The default 'per_load' value is 10.
+
 Then you can use
-  >> Article.load_more.last_load(10)
+  >> Article.load_more(last_load: 99)
+or
+  >> Article.load_more.last_load(99)
+
+You can also customize the per_load value:
+  >> Article.load_more(per_load: 20, last_load: 99)
+
 By default it use id as the sort column.
 
 == License
 This project rocks and uses MIT-LICENSE.
-  
+

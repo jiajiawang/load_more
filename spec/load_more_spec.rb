@@ -47,6 +47,12 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
       it 'returns results ordered by id descendingly' do
         expect(Article.load_more.pluck(:id)).to eq((13..20).to_a.reverse)
       end
+
+      context 'with option per_load' do
+        it 'returns the specified number of results' do
+          expect(Article.load_more(per_load: 9).size).to eq(9)
+        end
+      end
     end
 
     describe '#last_load' do
