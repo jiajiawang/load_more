@@ -16,25 +16,23 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
     end
   end
 
-  class Article < ActiveRecord::Base
-    acts_as_load_more
-  end
+  class Article < ActiveRecord::Base; end
 
   describe Article do
-    it 'its default per_load is 10' do
-      expect(Article.per_load).to eq(10)
+    it 'its default load_limit is 10' do
+      expect(Article.load_limit).to eq(10)
     end
 
-    describe "per_load=" do
-      it 'assigns per_load to the given argument' do
-        Article.per_load = 15
-        expect(Article.per_load).to eq(15)
+    describe "load_limit=" do
+      it 'assigns load_limit to the given argument' do
+        Article.load_limit = 15
+        expect(Article.load_limit).to eq(15)
       end
     end
 
     describe '#load_more' do
       before :each do
-        Article.per_load = 8
+        Article.load_limit = 8
         1.upto(20) do |num|
           Article.create(id: num)
         end
@@ -44,20 +42,20 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
         expect(Article.load_more.pluck(:id)).to eq((13..20).to_a.reverse)
       end
 
-      it 'returns {Article.per_load} results if no per_load specified' do
-        expect(Article.load_more.size).to eq(Article.per_load)
+      it 'returns {Article.load_limit} results if no per_load specified' do
+        expect(Article.load_more.size).to eq(Article.load_limit)
       end
 
-      it 'returns the specified number of results if per_load is specified' do
-        expect(Article.load_more(per_load: 9).size).to eq(9)
+      it 'returns the specified number of results if load_limit is specified' do
+        expect(Article.load_more(load_limit: 9).size).to eq(9)
       end
 
       it 'retunrs the most recent results if last_load is nil' do
-        expect(Article.load_more(per_load: nil).pluck(:id)).to match_array((13..20).to_a)
+        expect(Article.load_more(load_limit: nil).pluck(:id)).to match_array((13..20).to_a)
       end
 
       it 'retunrs the most recent results if last_load is not specified' do
-        expect(Article.load_more(per_load: nil).pluck(:id)).to match_array((13..20).to_a)
+        expect(Article.load_more(load_limit: nil).pluck(:id)).to match_array((13..20).to_a)
       end
 
       it 'returns only results whose is less than last_load if it is specified' do

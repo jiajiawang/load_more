@@ -2,41 +2,35 @@ require 'active_record' unless defined? ActiveRecord
 
 module LoadMore
   module ActiveRecord
-    @@per_load = 10
-
-    def per_load=(limit)
-      @@per_load = limit
-    end
-
-    def per_load
-      @@per_load
-    end
-
-    def load_more(options = {})
-      per_load = options.delete(:per_load) || self.per_load
-      last_load_id = options.delete(:last_load)
-      rel = order(id: :desc).limit(per_load)
-      rel = rel.where("#{self.table_name}.id < ?", last_load_id) if last_load_id
-      rel
-    end
-
-    def last_load(id = nil)
-      load_more(last_load: id)
-    end
-  end
-
-  module ActsAsLoadMore
     extend ActiveSupport::Concern
 
     included do
     end
 
     module ClassMethods
-      def acts_as_load_more
-        extend LoadMore::ActiveRecord
+      @@load_limit = 10
+
+      def load_limit=(limit)
+        @@load_limit = limit
+      end
+
+      def load_limit
+        @@load_limit
+      end
+
+      def load_more(options = {})
+        load_limit = options.delete(:load_limit) || self.load_limit
+        last_load_id = options.delete(:last_load)
+        rel = order(id: :desc).limit(load_limit)
+        rel = rel.where("#{self.table_name}.id < ?", last_load_id) if last_load_id
+        rel
+      end
+
+      def last_load(id = nil)
+        load_more(last_load: id)
       end
     end
   end
 end
 
-ActiveRecord::Base.send :include, LoadMore::ActsAsLoadMore
+ActiveRecord::Base.send :include, LoadMore::ActiveRecord
