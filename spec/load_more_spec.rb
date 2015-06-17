@@ -40,27 +40,30 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
         end
       end
 
-      it 'returns {Article.per_load} results' do
-        expect(Article.load_more.size).to eq(Article.per_load)
-      end
-
       it 'returns results ordered by id descendingly' do
         expect(Article.load_more.pluck(:id)).to eq((13..20).to_a.reverse)
       end
 
-      context 'with option per_load' do
-        it 'returns the specified number of results' do
-          expect(Article.load_more(per_load: 9).size).to eq(9)
-        end
+      it 'returns {Article.per_load} results if no per_load specified' do
+        expect(Article.load_more.size).to eq(Article.per_load)
+      end
+
+      it 'returns the specified number of results if per_load is specified' do
+        expect(Article.load_more(per_load: 9).size).to eq(9)
+      end
+
+      it 'returns only results whose is less than last_load if it is specified' do
+        expect(
+          Article.load_more(last_load: 15).map(&:id)
+        ).to match_array((7..14).to_a)
       end
     end
 
     describe '#last_load' do
-      it 'returns only results whose id is less than the given id' do
-        1.upto(5) do |num|
-          Article.create(id: num)
-        end
-        expect(Article.last_load(4).pluck(:id)).to eq((1..3).to_a)
+      it 'calls load_more with option last_load' do
+        id = 10
+        expect(Article).to receive(:load_more).with({last_load: id})
+        Article.last_load(id)
       end
     end
   end
