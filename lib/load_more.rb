@@ -56,9 +56,9 @@ module LoadMore
         rel = order(sort_column => sort_method).limit(load_limit)
         if last_load_id
           where_query = if sort_method == :desc
-                          "#{self.table_name}.id < ?"
+                          "#{self.table_name}.#{sort_column} < ?"
                         else
-                          "#{self.table_name}.id > ?"
+                          "#{self.table_name}.#{sort_column} > ?"
                         end
           rel = rel.where(where_query, last_load_id)
         end

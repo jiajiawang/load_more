@@ -74,16 +74,16 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
         expect(Article.load_more().pluck(:id)).to match_array((13..20).to_a)
       end
 
-      it 'returns only results whose is less than last_load if last_load is specified and sort_method is :desc' do
+      it 'returns only results whose sort_column is less than last_load if last_load is specified and sort_method is :desc' do
         expect(
-          Article.load_more(sort_method: :desc, last_load: 15).map(&:id)
+          Article.load_more(sort_column: :id, sort_method: :desc, last_load: 15).map(&:id)
         ).to match_array((7..14).to_a)
       end
 
       it 'returns only results whose is large than last_load if last_load is specified and sort_method is :asc' do
         expect(
-          Article.load_more(sort_method: :asc, last_load: 10).map(&:id)
-        ).to match_array((11..18).to_a)
+          Article.load_more(sort_column: :another_id, sort_method: :asc, last_load: 110).map(&:another_id)
+        ).to match_array((111..118).to_a)
       end
     end
 
