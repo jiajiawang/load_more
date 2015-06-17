@@ -20,7 +20,7 @@ module LoadMore
       rel
     end
 
-    def last_load(id)
+    def last_load(id = nil)
       load_more(last_load: id)
     end
   end

@@ -52,6 +52,14 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
         expect(Article.load_more(per_load: 9).size).to eq(9)
       end
 
+      it 'retunrs the most recent results if last_load is nil' do
+        expect(Article.load_more(per_load: nil).pluck(:id)).to match_array((13..20).to_a)
+      end
+
+      it 'retunrs the most recent results if last_load is not specified' do
+        expect(Article.load_more(per_load: nil).pluck(:id)).to match_array((13..20).to_a)
+      end
+
       it 'returns only results whose is less than last_load if it is specified' do
         expect(
           Article.load_more(last_load: 15).map(&:id)
@@ -60,10 +68,18 @@ RSpec.describe 'LoadMore::ActsAsLoadMore' do
     end
 
     describe '#last_load' do
-      it 'calls load_more with option last_load' do
-        id = 10
-        expect(Article).to receive(:load_more).with({last_load: id})
-        Article.last_load(id)
+      context 'with argument' do
+        it 'calls load_more with option last_load: argment' do
+          id = 10
+          expect(Article).to receive(:load_more).with({last_load: id})
+          Article.last_load(id)
+        end
+      end
+      context 'without argument' do
+        it 'calls load_more with option last_load: nil' do
+          expect(Article).to receive(:load_more).with({last_load: nil})
+          Article.last_load
+        end
       end
     end
   end
