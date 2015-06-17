@@ -11,18 +11,20 @@ Then run
 In your model:
   class Article < ActiveRecord::Base
     self.load_limit = 15
+    self.sort_column = :unique_id
+    self.sort_method = :desc
   end
-If not specified, then the default 'load_limit' value is 10.
+If not specified, the default 'load_limit' value is 10
+, the default 'sort_column' value is :unique_id
+and the default 'sort_method' value is :desc
 
 Then you can use
   >> Article.load_more(last_load: params[:last_load_id])
 or
   >> Article.last_load(params:[last_load_id])
 
-You can also customize the load_limit value:
-  >> Article.load_more(load_limit: 20, last_load: 99)
-
-By default it use id as the sort column.
+You can also customize the load_limit, sort_column, sort_method value:
+  >> Article.load_more(load_limit: 20, sort_column: :sku, sort_method: :asc, last_load: 99)
 
 == License
 This project rocks and uses MIT-LICENSE.
