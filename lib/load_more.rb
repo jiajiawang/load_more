@@ -16,7 +16,7 @@ module LoadMore
       per_load = options.delete(:per_load) || self.per_load
       last_load_id = options.delete(:last_load)
       rel = order(id: :desc).limit(per_load)
-      rel = rel.where('id < ?', last_load_id) if last_load_id
+      rel = rel.where("#{self.table_name}.id < ?", last_load_id) if last_load_id
       rel
     end
 
