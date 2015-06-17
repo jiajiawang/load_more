@@ -8,23 +8,30 @@ Then run
   bundle install
 
 == Usage
+
+=== Query
+  Article.load_more(last_load: params[:last_load_id])
+  Article.last_load(params:[last_load_id])
+
+=== Configuring global default value
+In +config/initializers/load_more.rb+:
+  LoadMore.configure do |config|
+    config.load_limit = 10
+    config.sort_column = :id
+    config.sort_method = :desc
+  end
+The above is the default configuration.
+
+=== Configuring default value for each model
 In your model:
   class Article < ActiveRecord::Base
     self.load_limit = 15
     self.sort_column = :unique_id
     self.sort_method = :desc
   end
-If not specified, the default 'load_limit' value is 10
-, the default 'sort_column' value is :id
-and the default 'sort_method' value is :desc
 
-Then you can use
-  >> Article.load_more(last_load: params[:last_load_id])
-or
-  >> Article.last_load(params:[last_load_id])
-
-You can also customize the load_limit, sort_column, sort_method value:
-  >> Article.load_more(load_limit: 20, sort_column: :sku, sort_method: :asc, last_load: 99)
+=== Configuring default values for each query
+  Article.load_more(load_limit: 20, sort_column: :sku, sort_method: :asc, last_load: 99)
 
 == License
 This project rocks and uses MIT-LICENSE.
