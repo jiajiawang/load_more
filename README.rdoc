@@ -15,7 +15,7 @@ In your model:
     self.sort_method = :desc
   end
 If not specified, the default 'load_limit' value is 10
-, the default 'sort_column' value is :unique_id
+, the default 'sort_column' value is :id
 and the default 'sort_method' value is :desc
 
 Then you can use
